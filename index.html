@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>qr-code-reader test</title>
+</head><body>
+<h1>qr-code-reader test</h1>
+
+<script type="module" src="qr-code-reader.js"></script>
+<input id=res style="width:95vw"><br>
+<qr-code-reader id=qrr></qr-code-reader><br>
+<button id=btn>stop</button>
+
+<script type="module">
+qrr.oninput = (s) => {
+  res.value = s.data;
+  //qrr.stop();
+};
+btn.onclick = () => qrr.stop();
+</script>
+
+
+<div>
+  related app: <a href=https://code4fukui.github.io/qr-code/>qr-code</a><br>
+  src: <a href=https://github.com/code4fukui/qr-code-reader/>qr-code-reader</a><br>
+</div>
+</body></html>
