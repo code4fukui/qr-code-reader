@@ -44,6 +44,9 @@ class QRCodeReader extends HTMLElement {
       });
       this.camera.start();
       this.canvas = canvas;
+      canvas.onclick = () => {
+        this.stop();
+      };
     };
   }
   oninput(bin) {
