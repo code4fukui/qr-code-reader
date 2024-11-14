@@ -1,9 +1,7 @@
 import { Camera } from "https://code4fukui.github.io/Camera/Camera.js";
 import { jsQR } from "https://code4fukui.github.io/jsQR-es/jsQR.js";
-//import { PNG } from "https://taisukef.github.io/PNG/PNG.js";
 import { setDropFilesListener } from "https://js.sabae.cc/setDropFilesListener.js";
-import { readAsArrayBufferAsync } from "https://code4sabae.github.io/js/readAsArrayBufferAsync.js";
-import { JPEG } from "https://taisukef.github.io/jpeg-js-es/JPEG.js";
+import { decodeImageFromFile } from "./decodeImageFromFile.js";
 
 class QRCodeReader extends HTMLElement {
   constructor() {
@@ -54,10 +52,7 @@ class QRCodeReader extends HTMLElement {
     };
     setDropFilesListener(btn, async (files) => {
       const file = files[0];
-      const bin = await readAsArrayBufferAsync(file.file);
-      //const img = PNG.decode(bin);
-      //console.log(img);
-      const imageData = JPEG.decode(bin);
+      const imageData = await decodeImageFromFile(file);
       //canvas.width = img.width;
       //canvas.height = img.videoHeight;
       //g.drawImage(img, 0, 0, canvas.width, canvas.height);
