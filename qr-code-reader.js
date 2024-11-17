@@ -7,7 +7,8 @@ class QRCodeReader extends HTMLElement {
   constructor() {
     super();
     const btn = document.createElement("button");
-    btn.textContent = "QRコード読み込み";
+    const lang = document.documentElement.lang;
+    btn.textContent = lang == "ja" ? "QRコード読み込み" : "read QR code";
     btn.style.margin = "2em";
     btn.style.padding = "3em";
     this.appendChild(btn);
@@ -53,16 +54,20 @@ class QRCodeReader extends HTMLElement {
     setDropFilesListener(btn, async (files) => {
       const file = files[0];
       const imageData = await decodeImageFromFile(file);
-      //canvas.width = img.width;
-      //canvas.height = img.videoHeight;
-      //g.drawImage(img, 0, 0, canvas.width, canvas.height);
-      //g.putImageData(img.imageData, img,width, img.height);
-      //const imageData = g.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height, {
-        inversionAttempts: "dontInvert",
-      });
-      if (code) {
-        this.oninput(code);
+      if (imageData) {
+        //canvas.width = img.width;
+        //canvas.height = img.videoHeight;
+        //g.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //g.putImageData(img.imageData, img,width, img.height);
+        //const imageData = g.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "dontInvert",
+        });
+        if (code) {
+          this.oninput(code);
+        }
+      } else {
+        this.oninput({ data: "" });
       }
     });
   }
