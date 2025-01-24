@@ -32,12 +32,7 @@ class QRCodeReader extends HTMLElement {
         canvas.height = video.videoHeight;
         g.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = g.getImageData(0, 0, canvas.width, canvas.height);
-        const code = jsQR(imageData.data, imageData.width, imageData.height, {
-          inversionAttempts: "dontInvert",
-        });
-        if (code) {
-          this.oninput(code);
-        }
+        this.decodeQR(imageData);
       };
       this.camera = new Camera(video, {
         onFrame,
@@ -54,22 +49,19 @@ class QRCodeReader extends HTMLElement {
     setDropFilesListener(btn, async (files) => {
       const file = files[0];
       const imageData = await decodeImageFromFile(file);
-      if (imageData) {
-        //canvas.width = img.width;
-        //canvas.height = img.videoHeight;
-        //g.drawImage(img, 0, 0, canvas.width, canvas.height);
-        //g.putImageData(img.imageData, img,width, img.height);
-        //const imageData = g.getImageData(0, 0, canvas.width, canvas.height);
-        const code = jsQR(imageData.data, imageData.width, imageData.height, {
-          inversionAttempts: "dontInvert",
-        });
-        if (code) {
-          this.oninput(code);
-        }
-      } else {
-        this.oninput({ data: "" });
-      }
+      this.decodeQR(imageData);
     });
+  }
+  decodeQR(imageData) {
+    let res = { data: "" };
+    if (imageData) {
+      const code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: "dontInvert",
+      });
+      if (code) res = code;
+    }
+    this.oninput(res);
+    return res;
   }
   oninput(bin) {
     console.log("oninput", bin);
