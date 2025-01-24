@@ -8,15 +8,39 @@
 <qr-code-reader id=qrr></qr-code-reader><br>
 <button id=btn>stop</button>
 
+<div id=pasteimgs></div>
+
 <script type="module">
+import { decodeImageFromFile } from "./decodeImageFromFile.js";
+
 qrr.oninput = (s) => {
   res.value = s.data;
   //qrr.stop();
 };
 btn.onclick = () => qrr.stop();
+
+res.addEventListener("paste", async (e) => {
+  e.preventDefault();
+  const items = e.clipboardData?.items;
+  if (!items) return;
+  for (const item of items) {
+    if (item.type.startsWith("image/")) {
+      const file = item.getAsFile();
+
+      const imgd = await decodeImageFromFile(file);
+      qrr.decodeQR(imgd);
+
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.style.width = "300px";
+      pasteimgs.appendChild(img);
+    }
+  }
+});
 </script>
 
 
+<hr>
 <div>
   related app: <a href=https://code4fukui.github.io/qr-code/>qr-code</a><br>
   src: <a href=https://github.com/code4fukui/qr-code-reader/>qr-code-reader</a><br>
