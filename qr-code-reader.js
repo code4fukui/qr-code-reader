@@ -60,6 +60,9 @@ class QRCodeReader extends HTMLElement {
       });
       if (code) {
         res = code;
+        if (Array.isArray(res.binaryData) && !(res.binaryData instanceof Uint8Array)) {
+          res.binaryData = new Uint8Array(res.binaryData);
+        }
         this.oninput(res);
       }
     }
