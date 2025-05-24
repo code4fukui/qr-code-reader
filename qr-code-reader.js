@@ -58,9 +58,11 @@ class QRCodeReader extends HTMLElement {
       const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: "dontInvert",
       });
-      if (code) res = code;
+      if (code) {
+        res = code;
+        this.oninput(res);
+      }
     }
-    this.oninput(res);
     return res;
   }
   oninput(bin) {
